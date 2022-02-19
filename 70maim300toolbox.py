@@ -18,21 +18,30 @@ _CONNECT_KEY = flags.DEFINE_string(
     name='connect_key',
     default=None,
     required=True,
-    help=("A 32 char long hex string that's generated when paring with the phone. "
-          "Find yours in 70mai app's app data, in one of the SQLite files. "
-          'Or use Wireshark to sniff clear text HTTP packages between the phone and the dashcam when pairing. '
-          'Example: --connect_key=873ea99b5db1e67d1f065dedce6059f0'))
+    help=
+    ("A 32 char long hex string that's generated when paring with the phone. "
+     'It can be found in 70mai app data. '
+     'Or use Wireshark to sniff clear text HTTP packages between the phone and the dashcam when pairing. '
+     'Example: --connect_key=873ea99b5db1e67d1f065dedce6059f0'))
 
 _OPERATIONS = flags.DEFINE_multi_enum(
     name='operations',
     default=None,
     required=True,
     enum_values=[
-        'get_sd_card_status', 'purge_files', 'sync_files', 'sync_time', 'update_wifi_password'
+        'get_sd_card_status',
+        'purge_files',
+        'sync_files',
+        'sync_time',
+        'update_wifi_password',
+        'stop_recording',
+        'start_recording',
+        'format_sd_card',
+        'experimental',
     ],
-    help=(
-        'A list of operations to perform in sequence. '
-        'Example: --operations=sync_files --operations=purge_files --operations=get_sd_card_status'
+    help=
+    ('A list of operations to perform in sequence. '
+     'Example: --operations=get_sd_card_status --operations=sync_files --operations=purge_files --operations=get_sd_card_status'
     ))
 
 _HTTP_TIMEOUT_SEC = flags.DEFINE_float(
@@ -194,13 +203,14 @@ def _get_file_entries(file_type: FileType) -> List[FileEntry]:
         file_entry = FileEntry(result['path'], result['name'], content_length_b, file_type)
         file_entries.append(file_entry)
         logging.debug('%s', file_entry)
+
     return file_entries
 
 
 def get_sd_card_status() -> SdCardStatus:
     http_response = _get_http_response('getsdstate.cgi')
+    # Example: {'sdstate': 'SDOK', 'sdtotal': '60882MB', 'sdused': '3360MB'}
     result: Dict[str, str] = _check_and_get_result(http_response.text)
-    # Example: {'sdstate': 'SDOK', 'sdtotal': 60882, 'sdused': 3360}
     return SdCardStatus(result['sdstate'], int(result['sdtotal'][:-2]), int(result['sdused'][:-2]))
 
 
@@ -284,6 +294,24 @@ def update_wifi_password() -> str:
     return new_password
 
 
+def set_recording(is_recording: bool) -> None:
+    # record.cgi doesn't work for M300.
+    # http_response = _get_http_response('record.cgi', {'cmd': 'start' if is_recording else 'stop'})
+    http_response = _get_http_response('setaccessalbum.cgi', {'enable': 1 if is_recording else 0})
+    _check_and_get_result(http_response.text)
+
+
+def format_sd_card() -> None:
+    http_response = _get_http_response('sdcommand.cgi', {'format': 1})
+    _check_and_get_result(http_response.text)
+
+
+# Good for trying out new stuff without disrupting the rest of the script.
+def experimental() -> Any:
+    http_response = _get_http_response('getAllMenu.cgi')
+    return _check_and_get_result(http_response.text)
+
+
 def main(_: List[str]):
     logging.get_absl_handler().use_absl_log_file()
 
@@ -311,6 +339,22 @@ def main(_: List[str]):
 
         if operation == 'update_wifi_password':
             print(update_wifi_password())
+            continue
+
+        if operation == 'start_recording':
+            set_recording(True)
+            continue
+
+        if operation == 'stop_recording':
+            set_recording(False)
+            continue
+
+        if operation == 'format_sd_card':
+            format_sd_card()
+            continue
+
+        if operation == 'experimental':
+            print(experimental())
             continue
 
         raise ValueError(f'Unknown operation {operation}')
