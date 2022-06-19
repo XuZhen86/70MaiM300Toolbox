@@ -1,6 +1,7 @@
-FROM python:slim
-ARG DEBIAN_FRONTEND=noninteractive
+FROM python:3.10-alpine
 
-RUN pip install absl_py requests
+WORKDIR /app
+ADD . /app
+RUN pip3 install .
 
-ADD 70maim300toolbox.py /
+ENTRYPOINT ["70mai-m300-toolbox"]

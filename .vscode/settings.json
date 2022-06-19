@@ -2,6 +2,6 @@
   "python.formatting.provider": "yapf",
   "python.formatting.yapfArgs": [
     "--style",
-    "{based_on_style: google, COLUMN_LIMIT: 100}"
+    "{based_on_style: google, COLUMN_LIMIT: 100, INDENT_WIDTH: 2}"
   ]
 }
