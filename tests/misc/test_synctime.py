@@ -11,6 +11,7 @@ from src.misc import synctime
        SimpleNamespace(now=MagicMock(return_value=SimpleNamespace(strftime=MagicMock(
            return_value='20220611021555')))))
 @patch('src.http.httputil.get_result', MagicMock(return_value=None))
+@patch('builtins.print', MagicMock(return_value=None))
 class TestSyncTime(TestCase):
 
   def test(self):
@@ -18,3 +19,4 @@ class TestSyncTime(TestCase):
 
     datetime.datetime.now().strftime.assert_called_once_with('%Y%m%d%H%M%S')
     httputil.get_result.assert_called_once_with('setsystime.cgi', {'time': '20220611021555'})
+    print.assert_called_once_with('synced to time: 20220611021555')
