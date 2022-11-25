@@ -14,7 +14,7 @@ _WIFI_PASSWORD = 'xwAERWqefV7cZPqvsUYs1CMZj4fD2acLl7V4SpHsPmr5zsbDdoxWXqVp43lOem
 @patch('builtins.print', MagicMock(return_value=None))
 class TestUpdateWifiPassword(TestCase):
 
-  def test(self):
+  def test(self) -> None:
     updatewifipassword.update_wifi_password()
 
     random.choices.assert_called_once_with(string.ascii_letters + string.digits, k=63)

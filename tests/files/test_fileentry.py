@@ -6,7 +6,7 @@ from src.files.filetype import FileType
 
 class TestFileEntry(TestCase):
 
-  def test_parses_from_result(self):
+  def test_parses_from_result(self) -> None:
     file_entry = FileEntry(
         {
             'path': 'sd/Lapse',
@@ -20,7 +20,7 @@ class TestFileEntry(TestCase):
     self.assertEqual(file_entry.size_b, 5373952)
     self.assertEqual(file_entry.file_type, FileType.TIME_LAPSE)
 
-  def test_ignores_result_size_field(self):
+  def test_ignores_result_size_field(self) -> None:
     file_entry = FileEntry(
         {
             'path': 'sd/Lapse',
@@ -31,7 +31,7 @@ class TestFileEntry(TestCase):
 
     self.assertEqual(file_entry.size_b, 100)
 
-  def test_ignores_result_type_field(self):
+  def test_ignores_result_type_field(self) -> None:
     file_entry = FileEntry(
         {
             'path': 'sd/Lapse',
@@ -42,11 +42,11 @@ class TestFileEntry(TestCase):
 
     self.assertEqual(file_entry.file_type, FileType.NORMAL)
 
-  def test_missing_key_raises_key_error(self):
+  def test_missing_key_raises_key_error(self) -> None:
     with self.assertRaises(KeyError):
       FileEntry({}, 100, FileType.NORMAL)
 
-  def test_compare_based_on_timestamp_only(self):
+  def test_compare_based_on_timestamp_only(self) -> None:
     file_entry_1 = FileEntry({
         'path': 'sd/Parking',
         'name': 'PA20211112-194823-000003.mp4',
@@ -58,7 +58,7 @@ class TestFileEntry(TestCase):
 
     self.assertLess(file_entry_1, file_entry_2)
 
-  def test_compare_sequence_number_if_same_timestamp(self):
+  def test_compare_sequence_number_if_same_timestamp(self) -> None:
     file_entry_1 = FileEntry({
         'path': 'sd/Parking',
         'name': 'PA20211112-194823-000002.mp4',
@@ -70,7 +70,7 @@ class TestFileEntry(TestCase):
 
     self.assertLess(file_entry_1, file_entry_2)
 
-  def test_get_local_path_normal(self):
+  def test_get_local_path_normal(self) -> None:
     file_entry = FileEntry({
         'path': 'sd/Normal',
         'name': 'NO20220610-121418-001120.mp4'
@@ -78,7 +78,7 @@ class TestFileEntry(TestCase):
 
     self.assertEqual(file_entry.get_local_path(), 'Normal/20220610/NO20220610-121418-001120.mp4')
 
-  def test_get_local_path_parking(self):
+  def test_get_local_path_parking(self) -> None:
     file_entry = FileEntry({
         'path': 'sd/Parking',
         'name': 'PA20211125-124504-000326.mp4'
@@ -86,7 +86,7 @@ class TestFileEntry(TestCase):
 
     self.assertEqual(file_entry.get_local_path(), 'Parking/20211125/PA20211125-124504-000326.mp4')
 
-  def test_get_local_path_time_lapse(self):
+  def test_get_local_path_time_lapse(self) -> None:
     file_entry = FileEntry({
         'path': 'sd/Lapse',
         'name': 'LA20220610-224543-001143.mp4'

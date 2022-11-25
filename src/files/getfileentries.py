@@ -1,13 +1,12 @@
-from typing import List
-
 from absl import logging
+
 from src.files import getfilecount
 from src.files.fileentry import FileEntry
 from src.files.filetype import FileType
 from src.http import httputil
 
 
-def get_file_entries(file_type: FileType) -> List[FileEntry]:
+def get_file_entries(file_type: FileType) -> list[FileEntry]:
   file_count = getfilecount.get_file_count(file_type)
   if file_count == 0:
     return []
@@ -18,7 +17,7 @@ def get_file_entries(file_type: FileType) -> List[FileEntry]:
       'type': int(file_type)
   })
 
-  file_entries: List[FileEntry] = []
+  file_entries: list[FileEntry] = []
   for result in results:
     path: str = result['path']
     name: str = result['name']

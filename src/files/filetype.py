@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import List
+from typing import Self
 
 
 class FileType(IntEnum):
@@ -22,5 +22,5 @@ class FileType(IntEnum):
         raise NotImplementedError('local path for this FileType is not yet defined')
 
   @staticmethod
-  def get_enabled_types() -> List:
+  def get_enabled_types() -> list[Self]:
     return [FileType.NORMAL, FileType.PARKING, FileType.TIME_LAPSE]

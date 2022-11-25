@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Dict
 
 
 @dataclass
@@ -8,7 +7,7 @@ class SdCardStatus:
   capacity_mb: int
   used_mb: int
 
-  def __init__(self, result: Dict[str, str]) -> None:
+  def __init__(self, result: dict[str, str]) -> None:
     self.status = result['sdstate']
     self.capacity_mb = _parse_result_field_mb(result['sdtotal'])
     self.used_mb = _parse_result_field_mb(result['sdused'])

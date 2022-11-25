@@ -1,5 +1,3 @@
-from typing import List
-
 from absl import app, flags, logging
 
 from src.files.filetype import FileType
@@ -31,7 +29,7 @@ _OPERATIONS = flags.DEFINE_multi_enum(
 def app_run_main() -> None:
   app.run(main)
 
-def main(_: List[str]) -> None:
+def main(_: list[str]) -> None:
   logging.get_absl_handler().use_absl_log_file()
 
   operation: str

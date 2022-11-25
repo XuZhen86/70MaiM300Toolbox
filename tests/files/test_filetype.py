@@ -5,7 +5,7 @@ from src.files.filetype import FileType
 
 class TestFileType(TestCase):
 
-  def test(self):
+  def test(self) -> None:
     self.assertEqual(FileType(0).get_local_path(), 'Normal')
 
     with self.assertRaises(NotImplementedError):

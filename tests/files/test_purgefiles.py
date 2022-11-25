@@ -31,16 +31,16 @@ _FILE_ENTRIES = [
 @patch('src.http.httputil.get_result', MagicMock(return_value=None))
 class TestLocalFilesDoNotExist(TestCase):
 
-  def setUp(self):
+  def setUp(self) -> None:
     self.prev_work_dir = os.getcwd()
     self.temp_dir = tempfile.TemporaryDirectory()
     os.chdir(self.temp_dir.name)
 
-  def tearDown(self):
+  def tearDown(self) -> None:
     os.chdir(self.prev_work_dir)
     self.temp_dir.cleanup()
 
-  def test(self):
+  def test(self) -> None:
     purgefiles.purge_files(FileType.NORMAL)
 
     httputil.get_result.assert_not_called()
@@ -50,7 +50,7 @@ class TestLocalFilesDoNotExist(TestCase):
 @patch('src.http.httputil.get_result', MagicMock(return_value=None))
 class TestLocalFilesDifferentSizes(TestCase):
 
-  def setUp(self):
+  def setUp(self) -> None:
     self.prev_work_dir = os.getcwd()
     self.temp_dir = tempfile.TemporaryDirectory()
 
@@ -62,11 +62,11 @@ class TestLocalFilesDifferentSizes(TestCase):
 
     os.chdir(self.temp_dir.name)
 
-  def tearDown(self):
+  def tearDown(self) -> None:
     os.chdir(self.prev_work_dir)
     self.temp_dir.cleanup()
 
-  def test(self):
+  def test(self) -> None:
     purgefiles.purge_files(FileType.NORMAL)
 
     httputil.get_result.assert_not_called()
@@ -76,7 +76,7 @@ class TestLocalFilesDifferentSizes(TestCase):
 @patch('src.http.httputil.get_result', MagicMock(return_value=None))
 class TestLocalFilesExist(TestCase):
 
-  def setUp(self):
+  def setUp(self) -> None:
     self.prev_work_dir = os.getcwd()
     self.temp_dir = tempfile.TemporaryDirectory()
 
@@ -88,11 +88,11 @@ class TestLocalFilesExist(TestCase):
 
     os.chdir(self.temp_dir.name)
 
-  def tearDown(self):
+  def tearDown(self) -> None:
     os.chdir(self.prev_work_dir)
     self.temp_dir.cleanup()
 
-  def test(self):
+  def test(self) -> None:
     purgefiles.purge_files(FileType.NORMAL)
 
     self.assertEqual(httputil.get_result.call_count, len(_FILE_ENTRIES))

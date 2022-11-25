@@ -31,7 +31,7 @@ _HTTP_HEADER_CONTENT_LENGTH = 12345678
 class TestGetFileEntries(TestCase):
 
   @patch('src.files.getfilecount.get_file_count', MagicMock(return_value=0))
-  def test_zero_file_count(self):
+  def test_zero_file_count(self) -> None:
     file_entries = get_file_entries(FileType.NORMAL)
     self.assertEqual(file_entries, [])
 
@@ -40,7 +40,7 @@ class TestGetFileEntries(TestCase):
   @patch('src.http.httputil.get_result', MagicMock(return_value=_HTTPUTIL_GET_RESULT_VALUE))
   @patch('src.http.httputil.get_http_headers',
          MagicMock(return_value={'Content-Length': str(_HTTP_HEADER_CONTENT_LENGTH)}))
-  def test_non_zero_file_count(self):
+  def test_non_zero_file_count(self) -> None:
     file_entries = get_file_entries(FileType.NORMAL)
 
     self.assertEqual(len(file_entries), len(_HTTPUTIL_GET_RESULT_VALUE))

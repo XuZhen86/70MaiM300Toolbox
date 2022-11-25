@@ -14,7 +14,7 @@ class TestGetSdCardStatus(TestCase):
 
   @patch('src.http.httputil.get_result', _HTTPUTIL_GET_RESULT_MAGIC_MOCK)
   @patch('builtins.print', MagicMock(return_value=None))
-  def test(self):
+  def test(self) -> None:
     sd_card_status = sdcardutil.get_sd_card_status()
 
     self.assertEqual(sd_card_status.status, 'SDOK')

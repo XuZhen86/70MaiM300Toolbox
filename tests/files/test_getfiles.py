@@ -33,16 +33,16 @@ _GET_CONTENT_ITERATOR_MAGIC_MOCK = MagicMock(
 @patch('src.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
 class TestNoExistingFiles(TestCase):
 
-  def setUp(self):
+  def setUp(self) -> None:
     self.prev_work_dir = os.getcwd()
     self.temp_dir = tempfile.TemporaryDirectory()
     os.chdir(self.temp_dir.name)
 
-  def tearDown(self):
+  def tearDown(self) -> None:
     os.chdir(self.prev_work_dir)
     self.temp_dir.cleanup()
 
-  def test(self):
+  def test(self) -> None:
     getfiles.get_files(FileType.NORMAL)
 
     for file_entry in _FILE_ENTRIES:
@@ -55,7 +55,7 @@ class TestNoExistingFiles(TestCase):
 @patch('src.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
 class TestPartialExistingFiles(TestCase):
 
-  def setUp(self):
+  def setUp(self) -> None:
     self.prev_work_dir = os.getcwd()
     self.temp_dir = tempfile.TemporaryDirectory()
 
@@ -70,7 +70,7 @@ class TestPartialExistingFiles(TestCase):
     os.chdir(self.prev_work_dir)
     self.temp_dir.cleanup()
 
-  def test(self):
+  def test(self) -> None:
     getfiles.get_files(FileType.NORMAL)
 
     for file_entry in _FILE_ENTRIES:
@@ -83,7 +83,7 @@ class TestPartialExistingFiles(TestCase):
 @patch('src.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
 class TestFullExistingFiles(TestCase):
 
-  def setUp(self):
+  def setUp(self) -> None:
     self.prev_work_dir = os.getcwd()
     self.temp_dir = tempfile.TemporaryDirectory()
 
@@ -99,7 +99,7 @@ class TestFullExistingFiles(TestCase):
     os.chdir(self.prev_work_dir)
     self.temp_dir.cleanup()
 
-  def test(self):
+  def test(self) -> None:
     getfiles.get_files(FileType.NORMAL)
 
     for file_entry in _FILE_ENTRIES:

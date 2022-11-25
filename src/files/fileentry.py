@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Dict
 
 from src.files.filetype import FileType
 
@@ -14,7 +13,7 @@ class FileEntry:
 
   # The size and type field in result are not accurate.
   # The caller should manuallly supply these fields.
-  def __init__(self, result: Dict[str, str], size_b: int, file_type: FileType) -> None:
+  def __init__(self, result: dict[str, str], size_b: int, file_type: FileType) -> None:
     self.path = result['path']
     self.name = result['name']
     self.size_b = size_b

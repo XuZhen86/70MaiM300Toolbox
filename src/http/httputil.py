@@ -1,7 +1,7 @@
 import hashlib
 import json
 import time
-from typing import Any, Callable, Dict, Iterator, Optional
+from typing import Any, Callable, Iterator
 
 import requests
 from absl import flags, logging
@@ -23,8 +23,8 @@ _HTTP_TIMEOUT_SEC = flags.DEFINE_float(
     'Example: --http_timeout_sec=60')
 
 
-def _process_raw_params(raw_params: Dict[str, Any] = {}) -> Dict[str, str]:
-  params: Dict[str, str] = {}
+def _process_raw_params(raw_params: dict[str, Any] = {}) -> dict[str, str]:
+  params: dict[str, str] = {}
   for key, value in raw_params.items():
     params['-' + key] = str(value)
 
@@ -34,14 +34,14 @@ def _process_raw_params(raw_params: Dict[str, Any] = {}) -> Dict[str, str]:
   return params
 
 
-def _generate_sign_key(command: str, params: Dict[str, str]) -> str:
+def _generate_sign_key(command: str, params: dict[str, str]) -> str:
   params_str = '&'.join(f'{key}={value}' for key, value in params.items())
   hash_str = f'{command}?{params_str}{_CONNECT_KEY.value}'
   sign_key = hashlib.md5(hash_str.encode('utf-8')).hexdigest()
   return sign_key
 
 
-def _get_http_response(command: str, raw_params: Dict[str, Any] = {}) -> requests.Response:
+def _get_http_response(command: str, raw_params: dict[str, Any] = {}) -> requests.Response:
   params = _process_raw_params(raw_params)
   sign_key = _generate_sign_key(command, params)
   params['-signkey'] = sign_key
@@ -53,8 +53,8 @@ def _get_http_response(command: str, raw_params: Dict[str, Any] = {}) -> request
 
 
 def get_result(command: str,
-               raw_params: Dict[str, Any] = {},
-               text_response_preprocessor: Optional[Callable[[str], str]] = None) -> Any:
+               raw_params: dict[str, Any] = {},
+               text_response_preprocessor: Callable[[str], str] | None = None) -> Any:
   text_response = _get_http_response(command, raw_params).text
   if text_response_preprocessor is not None:
     text_response = text_response_preprocessor(text_response)
@@ -62,7 +62,7 @@ def get_result(command: str,
   if len(text_response) == 0:
     raise ValueError('response_text is empty')
 
-  json_response: Dict[str, Any] = json.loads(text_response)
+  json_response: dict[str, Any] = json.loads(text_response)
   result_code = int(json_response['ResultCode'])
   if result_code != 0:
     raise ValueError(f'result_code is {result_code}, expected 0')
@@ -73,7 +73,7 @@ def get_result(command: str,
   return None
 
 
-def get_http_headers(url: str) -> Dict[str, str]:
+def get_http_headers(url: str) -> dict[str, str]:
   return requests.head(url, timeout=_HTTP_TIMEOUT_SEC.value).headers
 
 
