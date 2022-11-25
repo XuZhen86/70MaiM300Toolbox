@@ -12,6 +12,6 @@ setuptools.setup(
         'requests>=2.28.0',
     ],
     entry_points={
-        'console_scripts': ['70mai-m300-toolbox = src.main:app_run_main',],
+        'console_scripts': ['70mai-m300-toolbox = m300_toolbox.main:app_run_main',],
     },
 )

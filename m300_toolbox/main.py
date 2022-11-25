@@ -1,12 +1,12 @@
 from absl import app, flags, logging
 
-from src.files.filetype import FileType
-from src.files.getfiles import get_files
-from src.files.purgefiles import purge_files
-from src.misc.recordingutil import start_recording, stop_recording
-from src.misc.synctime import sync_time
-from src.misc.updatewifipassword import update_wifi_password
-from src.sdcard.sdcardutil import format_sd_card, get_sd_card_status
+from m300_toolbox.files.filetype import FileType
+from m300_toolbox.files.getfiles import get_files
+from m300_toolbox.files.purgefiles import purge_files
+from m300_toolbox.misc.recordingutil import start_recording, stop_recording
+from m300_toolbox.misc.synctime import sync_time
+from m300_toolbox.misc.updatewifipassword import update_wifi_password
+from m300_toolbox.sdcard.sdcardutil import format_sd_card, get_sd_card_status
 
 _OPERATIONS = flags.DEFINE_multi_enum(
     name='operations',

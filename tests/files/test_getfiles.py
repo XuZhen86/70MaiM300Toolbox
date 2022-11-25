@@ -3,9 +3,9 @@ import tempfile
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from src.files import getfiles
-from src.files.fileentry import FileEntry
-from src.files.filetype import FileType
+from m300_toolbox.files import getfiles
+from m300_toolbox.files.fileentry import FileEntry
+from m300_toolbox.files.filetype import FileType
 
 _CHUNK_SIZE = 420**2
 _CHUNK_COUNT = 3
@@ -29,8 +29,8 @@ _GET_CONTENT_ITERATOR_MAGIC_MOCK = MagicMock(
     side_effect=lambda _: iter([b'\x00' * _CHUNK_SIZE] * _CHUNK_COUNT))
 
 
-@patch('src.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
-@patch('src.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
+@patch('m300_toolbox.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
+@patch('m300_toolbox.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
 class TestNoExistingFiles(TestCase):
 
   def setUp(self) -> None:
@@ -51,8 +51,8 @@ class TestNoExistingFiles(TestCase):
       self.assertEqual(os.path.getsize(abs_local_path), file_entry.size_b)
 
 
-@patch('src.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
-@patch('src.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
+@patch('m300_toolbox.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
+@patch('m300_toolbox.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
 class TestPartialExistingFiles(TestCase):
 
   def setUp(self) -> None:
@@ -79,8 +79,8 @@ class TestPartialExistingFiles(TestCase):
       self.assertEqual(os.path.getsize(abs_local_path), file_entry.size_b)
 
 
-@patch('src.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
-@patch('src.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
+@patch('m300_toolbox.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
+@patch('m300_toolbox.http.httputil.get_content_iterator', _GET_CONTENT_ITERATOR_MAGIC_MOCK)
 class TestFullExistingFiles(TestCase):
 
   def setUp(self) -> None:

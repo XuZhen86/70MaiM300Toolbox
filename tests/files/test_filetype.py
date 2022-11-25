@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.files.filetype import FileType
+from m300_toolbox.files.filetype import FileType
 
 
 class TestFileType(TestCase):

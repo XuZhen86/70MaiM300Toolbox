@@ -1,9 +1,9 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from src.http import httputil
-from src.sdcard import sdcardutil
-from src.sdcard.sdcardstatus import SdCardStatus
+from m300_toolbox.http import httputil
+from m300_toolbox.sdcard import sdcardutil
+from m300_toolbox.sdcard.sdcardstatus import SdCardStatus
 
 
 class TestGetSdCardStatus(TestCase):
@@ -29,7 +29,7 @@ class TestGetSdCardStatus(TestCase):
 
 class TestFormatSdCard(TestCase):
 
-  @patch('src.http.httputil.get_result', MagicMock(return_value=None))
+  @patch('m300_toolbox.http.httputil.get_result', MagicMock(return_value=None))
   def test(self) -> None:
     sdcardutil.format_sd_card()
 

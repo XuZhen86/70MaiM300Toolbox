@@ -3,7 +3,7 @@ import string
 
 from absl import logging
 
-from src.http import httputil
+from m300_toolbox.http import httputil
 
 
 def update_wifi_password() -> None:

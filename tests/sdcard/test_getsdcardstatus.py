@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from src.sdcard import sdcardutil
+from m300_toolbox.sdcard import sdcardutil
 
 _HTTPUTIL_GET_RESULT_MAGIC_MOCK = MagicMock(return_value={
     'sdstate': 'SDOK',
@@ -12,7 +12,7 @@ _HTTPUTIL_GET_RESULT_MAGIC_MOCK = MagicMock(return_value={
 
 class TestGetSdCardStatus(TestCase):
 
-  @patch('src.http.httputil.get_result', _HTTPUTIL_GET_RESULT_MAGIC_MOCK)
+  @patch('m300_toolbox.http.httputil.get_result', _HTTPUTIL_GET_RESULT_MAGIC_MOCK)
   @patch('builtins.print', MagicMock(return_value=None))
   def test(self) -> None:
     sd_card_status = sdcardutil.get_sd_card_status()

@@ -1,7 +1,7 @@
 from absl import logging
 
-from src.files.filetype import FileType
-from src.http import httputil
+from m300_toolbox.files.filetype import FileType
+from m300_toolbox.http import httputil
 
 
 def get_file_count(file_type: FileType) -> int:

@@ -2,9 +2,9 @@ import os
 
 from absl import logging
 
-from src.files import getfileentries
-from src.files.filetype import FileType
-from src.http import httputil
+from m300_toolbox.files import getfileentries
+from m300_toolbox.files.filetype import FileType
+from m300_toolbox.http import httputil
 
 
 def purge_files(file_type: FileType) -> None:

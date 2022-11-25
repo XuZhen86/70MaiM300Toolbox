@@ -2,7 +2,7 @@ import datetime
 
 from absl import logging
 
-from src.http import httputil
+from m300_toolbox.http import httputil
 
 
 def sync_time() -> None:

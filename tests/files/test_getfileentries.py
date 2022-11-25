@@ -1,8 +1,8 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from src.files.filetype import FileType
-from src.files.getfileentries import get_file_entries
+from m300_toolbox.files.filetype import FileType
+from m300_toolbox.files.getfileentries import get_file_entries
 
 _HTTPUTIL_GET_RESULT_VALUE = [
     {
@@ -30,15 +30,16 @@ _HTTP_HEADER_CONTENT_LENGTH = 12345678
 
 class TestGetFileEntries(TestCase):
 
-  @patch('src.files.getfilecount.get_file_count', MagicMock(return_value=0))
+  @patch('m300_toolbox.files.getfilecount.get_file_count', MagicMock(return_value=0))
   def test_zero_file_count(self) -> None:
     file_entries = get_file_entries(FileType.NORMAL)
     self.assertEqual(file_entries, [])
 
-  @patch('src.files.getfilecount.get_file_count',
+  @patch('m300_toolbox.files.getfilecount.get_file_count',
          MagicMock(return_value=len(_HTTPUTIL_GET_RESULT_VALUE)))
-  @patch('src.http.httputil.get_result', MagicMock(return_value=_HTTPUTIL_GET_RESULT_VALUE))
-  @patch('src.http.httputil.get_http_headers',
+  @patch('m300_toolbox.http.httputil.get_result',
+         MagicMock(return_value=_HTTPUTIL_GET_RESULT_VALUE))
+  @patch('m300_toolbox.http.httputil.get_http_headers',
          MagicMock(return_value={'Content-Length': str(_HTTP_HEADER_CONTENT_LENGTH)}))
   def test_non_zero_file_count(self) -> None:
     file_entries = get_file_entries(FileType.NORMAL)

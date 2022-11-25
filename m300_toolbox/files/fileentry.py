@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.files.filetype import FileType
+from m300_toolbox.files.filetype import FileType
 
 
 @dataclass

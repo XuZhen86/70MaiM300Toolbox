@@ -1,4 +1,4 @@
-from src.http import httputil
+from m300_toolbox.http import httputil
 
 
 def start_recording() -> None:

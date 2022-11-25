@@ -1,7 +1,7 @@
 from absl import logging
 
-from src.http import httputil
-from src.sdcard.sdcardstatus import SdCardStatus
+from m300_toolbox.http import httputil
+from m300_toolbox.sdcard.sdcardstatus import SdCardStatus
 
 
 def get_sd_card_status() -> SdCardStatus:

@@ -3,10 +3,10 @@ import tempfile
 from unittest import TestCase
 from unittest.mock import MagicMock, call, patch
 
-from src.files import purgefiles
-from src.files.fileentry import FileEntry
-from src.files.filetype import FileType
-from src.http import httputil
+from m300_toolbox.files import purgefiles
+from m300_toolbox.files.fileentry import FileEntry
+from m300_toolbox.files.filetype import FileType
+from m300_toolbox.http import httputil
 
 _CHUNK_SIZE = 420**2
 _CHUNK_COUNT = 3
@@ -27,8 +27,8 @@ _FILE_ENTRIES = [
 ]
 
 
-@patch('src.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
-@patch('src.http.httputil.get_result', MagicMock(return_value=None))
+@patch('m300_toolbox.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
+@patch('m300_toolbox.http.httputil.get_result', MagicMock(return_value=None))
 class TestLocalFilesDoNotExist(TestCase):
 
   def setUp(self) -> None:
@@ -46,8 +46,8 @@ class TestLocalFilesDoNotExist(TestCase):
     httputil.get_result.assert_not_called()
 
 
-@patch('src.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
-@patch('src.http.httputil.get_result', MagicMock(return_value=None))
+@patch('m300_toolbox.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
+@patch('m300_toolbox.http.httputil.get_result', MagicMock(return_value=None))
 class TestLocalFilesDifferentSizes(TestCase):
 
   def setUp(self) -> None:
@@ -72,8 +72,8 @@ class TestLocalFilesDifferentSizes(TestCase):
     httputil.get_result.assert_not_called()
 
 
-@patch('src.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
-@patch('src.http.httputil.get_result', MagicMock(return_value=None))
+@patch('m300_toolbox.files.getfileentries.get_file_entries', MagicMock(return_value=_FILE_ENTRIES))
+@patch('m300_toolbox.http.httputil.get_result', MagicMock(return_value=None))
 class TestLocalFilesExist(TestCase):
 
   def setUp(self) -> None:

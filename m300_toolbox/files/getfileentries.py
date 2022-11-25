@@ -1,9 +1,9 @@
 from absl import logging
 
-from src.files import getfilecount
-from src.files.fileentry import FileEntry
-from src.files.filetype import FileType
-from src.http import httputil
+from m300_toolbox.files import getfilecount
+from m300_toolbox.files.fileentry import FileEntry
+from m300_toolbox.files.filetype import FileType
+from m300_toolbox.http import httputil
 
 
 def get_file_entries(file_type: FileType) -> list[FileEntry]:

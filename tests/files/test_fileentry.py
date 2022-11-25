@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from src.files.fileentry import FileEntry
-from src.files.filetype import FileType
+from m300_toolbox.files.fileentry import FileEntry
+from m300_toolbox.files.filetype import FileType
 
 
 class TestFileEntry(TestCase):
