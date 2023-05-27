@@ -14,4 +14,4 @@ clean:
 	rm -rf *.egg-info build
 
 docker-image:
-	docker build -t 70mai-m300-toolbox .
+	docker build --pull --no-cache --tag 70mai-m300-toolbox .
