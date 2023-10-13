@@ -6,7 +6,7 @@ setuptools.setup(
     author='XuZhen86',
     url='https://github.com/XuZhen86/70MaiM300Toolbox',
     packages=setuptools.find_packages(),
-    python_requires='==3.11.3',
+    python_requires='==3.11.6',
     install_requires=[
         'absl-py==1.4.0',
         'requests==2.31.0',
