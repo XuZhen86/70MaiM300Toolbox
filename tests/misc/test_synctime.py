@@ -7,9 +7,10 @@ from m300_toolbox.http import httputil
 from m300_toolbox.misc import synctime
 
 
-@patch('datetime.datetime',
-       SimpleNamespace(now=MagicMock(return_value=SimpleNamespace(strftime=MagicMock(
-           return_value='20220611021555')))))
+@patch(
+    'datetime.datetime',
+    SimpleNamespace(now=MagicMock(return_value=SimpleNamespace(strftime=MagicMock(
+        return_value='20220611021555')))))
 @patch('m300_toolbox.http.httputil.get_result', MagicMock(return_value=None))
 @patch('builtins.print', MagicMock(return_value=None))
 class TestSyncTime(TestCase):

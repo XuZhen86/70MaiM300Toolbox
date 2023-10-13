@@ -7,20 +7,11 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "eeyore.yapf",
+        "ms-python.isort",
         "ms-python.python"
-      ],
-      "settings": {
-        "python.formatting.provider": "yapf",
-        "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
-        "python.formatting.yapfArgs": [
-          "--style",
-          "{based_on_style: google, COLUMN_LIMIT: 100, INDENT_WIDTH: 2}"
-        ]
-      }
+      ]
     }
-  },
-  "features": {
-    "ghcr.io/devcontainers-contrib/features/yapf:1": {}
   },
   // https://containers.dev/implementors/json_reference/#image-specific
   "image": "python:3.11.3",

@@ -65,9 +65,10 @@ class TestGetResult(TestCase):
 
     self.assertEqual(result, None)
 
-  @patch('m300_toolbox.http.httputil._get_http_response',
-         MagicMock(return_value=SimpleNamespace(
-             text='{"ResultCode":"0","Result":{"field1":"1","field2":"2"}}')))
+  @patch(
+      'm300_toolbox.http.httputil._get_http_response',
+      MagicMock(return_value=SimpleNamespace(
+          text='{"ResultCode":"0","Result":{"field1":"1","field2":"2"}}')))
   def test_nonempty_result(self) -> None:
     result = get_result('command.cgi', {})
 

@@ -26,8 +26,10 @@ _OPERATIONS = flags.DEFINE_multi_enum(
     'Example: --operations=get-sd-card-status --operations=sync-files --operations=purge-files --operations=get-sd-card-status'
 )
 
+
 def app_run_main() -> None:
   app.run(main)
+
 
 def main(_: list[str]) -> None:
   logging.get_absl_handler().use_absl_log_file()
@@ -35,6 +37,7 @@ def main(_: list[str]) -> None:
   operation: str
   for operation in _OPERATIONS.value:
     dispatch_operation(operation)
+
 
 def dispatch_operation(operation: str) -> None:
   match operation:
@@ -66,6 +69,7 @@ def dispatch_operation(operation: str) -> None:
 
     case _:
       raise ValueError('unexpected operation')
+
 
 if __name__ == '__main__':
   app_run_main()

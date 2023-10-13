@@ -1,0 +1,14 @@
+{
+  "[python]": {
+    "editor.defaultFormatter": "eeyore.yapf",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+  },
+  "yapf.args": [
+    "--style",
+    "{based_on_style: google, COLUMN_LIMIT: 100, INDENT_WIDTH: 2}"
+  ],
+  "isort.args": ["--line-length", "100"]
+}
