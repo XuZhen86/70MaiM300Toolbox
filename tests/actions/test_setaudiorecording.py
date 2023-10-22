@@ -11,9 +11,9 @@ class TestSetAudioRecording(absltest.TestCase):
   @patch.object(Http, 'get', Mock())
   def test_true_enables(self):
     SetAudioRecording.execute(True)
-    Http.get.assert_called_once_with('setaudioin.cgi', {'enable': 1})
+    Http.get.assert_called_once_with('setaudioin.cgi', {'enable': 0})
 
   @patch.object(Http, 'get', Mock())
   def test_false_disables(self):
     SetAudioRecording.execute(False)
-    Http.get.assert_called_once_with('setaudioin.cgi', {'enable': 0})
+    Http.get.assert_called_once_with('setaudioin.cgi', {'enable': 1})

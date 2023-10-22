@@ -16,4 +16,4 @@ class SetAudioRecording(Action[bool, None]):
   @classmethod
   @override
   def execute(cls, enable: bool) -> None:
-    Http.get('setaudioin.cgi', {'enable': int(enable)})
+    Http.get('setaudioin.cgi', {'enable': int(not enable)})  # The value is flipped.
