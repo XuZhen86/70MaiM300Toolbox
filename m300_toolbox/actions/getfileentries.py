@@ -13,9 +13,15 @@ from m300_toolbox.http import Http
 class FileEntry:
   path: str
   name: str
-  size_b: int  # Appears to always be rounded to 65536. Roughly equals to the true file size.
-  content_length_b: int | None  # Equals to the Expected to be None when size_b > 2_147_483_648.
   type: int
+
+  # Appears to always be rounded to 65536.
+  # Roughly equals to the true file size.
+  size_b: int
+
+  # Equals to the true file fize.
+  # Unavailable when the file is larger than 2GiB.
+  content_length_b: int | None
 
 
 class GetFileEntries(Action[int, list[FileEntry]]):
@@ -45,7 +51,7 @@ class GetFileEntries(Action[int, list[FileEntry]]):
       'items': {
           'type': 'object',
           'required': ['path', 'name', 'size'],
-          '$comment': 'Properties "size" and "type" are ignored.',
+          '$comment': 'Property "type" is ignored.',
           'properties': {
               'path': {
                   'type': 'string'
