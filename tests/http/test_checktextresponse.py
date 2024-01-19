@@ -9,7 +9,7 @@ class TestCheckTextResponse(absltest.TestCase):
 
   def test_emptyTextResponse_raises(self):
     with self.assertRaises(Exception):
-      Http.check_text_response(self.COMMAND, self.PARAMS, '')
+      Http.check_text_response('')
 
   def test_nonEmptyTextResponse_doesNotRaise(self):
-    Http.check_text_response(self.COMMAND, self.PARAMS, 'non-empty')
+    Http.check_text_response('non-empty')

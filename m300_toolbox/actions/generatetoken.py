@@ -1,4 +1,5 @@
 import hashlib
+import time
 from typing import override
 
 import jsonschema
@@ -17,6 +18,18 @@ class GenerateToken(Action[bool, str | None]):
       default=None,
       help='Does initial setup with the dashcam using any random token. '
       'The generated token is needed for all subsequent interactions.',
+  )
+
+  USER_CONFIRM_ATTEMPTS = flags.DEFINE_integer(
+      name='user_confirm_attempts',
+      default=10,
+      help='Number of attempts to check for user confirmation.',
+  )
+
+  USER_CONFIRM_INTERVAL_S = flags.DEFINE_float(
+      name='user_confirm_interval_s',
+      default=1.0,
+      help='Time in seconds between attempts when checking for user confirmation.',
   )
 
   @classmethod
@@ -59,7 +72,7 @@ class GenerateToken(Action[bool, str | None]):
 
     try:
       text_response = Http.response(command, params).text
-      Http.check_text_response(command, params, text_response)
+      Http.check_text_response(text_response)
       result = Http.extract_result(text_response)
 
       cls.STEP_1_VALIDATOR.validate(result)
@@ -77,10 +90,18 @@ class GenerateToken(Action[bool, str | None]):
     params = {'-timestamp': timestamp, '-signkey': cls._pair_key(timestamp)}
 
     try:
-      text_response = Http.response(command, params).text
-      Http.check_text_response(command, params, text_response)
-      result = Http.extract_result(text_response)
-      assert result is None
+      for _ in range(cls.USER_CONFIRM_ATTEMPTS.value):
+        time.sleep(cls.USER_CONFIRM_INTERVAL_S.value)
+
+        text_response = Http.response(command, params).text
+        Http.check_text_response(text_response)
+        result_code = Http.extract_result_code(text_response)
+
+        if result_code == 0:
+          assert Http.extract_result(text_response) is None
+          return
+
+      raise TimeoutError('Exceeded max attempts while waiting for user confirmation.')
     except Exception as e:
       e.add_note(f'{command=}')
       e.add_note(f'{params=}')

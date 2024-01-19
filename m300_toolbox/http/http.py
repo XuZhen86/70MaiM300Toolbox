@@ -42,11 +42,22 @@ class Http:
           command: str,
           raw_params: dict[str, str | int] = {},
           text_response_fixer: Callable[[str], str] | None = None) -> dict | list | None:
-    params = cls.sign_params(command, raw_params)
-    text_response = cls.response(command, params).text  # Might use .json() here.
-    cls.check_text_response(command, params, text_response)
-    text_response = cls.apply_text_response_fixer(text_response, text_response_fixer)
-    return cls.extract_result(text_response)
+    try:
+      params = cls.sign_params(command, raw_params)
+    except Exception as e:
+      e.add_note(f'{command=}')
+      e.add_note(f'{raw_params=}')
+      raise
+
+    try:
+      text_response = cls.response(command, params).text  # Might use .json() here.
+      cls.check_text_response(text_response)
+      text_response = cls.apply_text_response_fixer(text_response, text_response_fixer)
+      return cls.extract_result(text_response)
+    except Exception as e:
+      e.add_note(f'{command=}')
+      e.add_note(f'{params=}')
+      raise
 
   @classmethod
   def sign_params(cls, command: str, raw_params: dict[str, str | int]) -> dict[str, str]:
@@ -65,18 +76,12 @@ class Http:
       except requests.Timeout:
         pass
 
-    e = TimeoutError('Reached max number of attempts before a response could be obtained.')
-    e.add_note(f'{command=}')
-    e.add_note(f'{params=}')
-    raise e
+    raise TimeoutError('Reached max number of attempts before a response could be obtained.')
 
   @staticmethod
-  def check_text_response(command: str, params: dict[str, str], text_response: str) -> None:
+  def check_text_response(text_response: str) -> None:
     if len(text_response) == 0:
-      e = Exception('Text response is empty. Expected non-empty text response.')
-      e.add_note(f'{command=}')
-      e.add_note(f'{params=}')
-      raise e
+      raise ValueError('Text response is empty. Expected non-empty text response.')
 
   @staticmethod
   def apply_text_response_fixer(text_response: str,
@@ -116,6 +121,16 @@ class Http:
 
     cls.TEXT_RESPONSE_VALIDATOR.validate(json_response)
     return json_response.get('Result', None)
+
+  @classmethod
+  def extract_result_code(cls, text_response: str) -> int:
+    try:
+      json_response = json.loads(text_response)
+    except json.JSONDecodeError as e:
+      e.add_note(f'{text_response=}')
+      raise
+
+    return int(json_response.get('ResultCode'))
 
   @classmethod
   def headers(cls, url: str) -> CaseInsensitiveDict:

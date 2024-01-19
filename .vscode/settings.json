@@ -3,7 +3,7 @@
     "editor.defaultFormatter": "eeyore.yapf",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+      "source.organizeImports": "always"
     },
   },
   "yapf.args": [

@@ -50,11 +50,15 @@ class TestGenerateToken(absltest.TestCase):
       }
   }))
 
-  @flagsaver.as_parsed((Http.TOKEN, SEED_TOKEN))
+  @flagsaver.as_parsed(
+      (Http.TOKEN, SEED_TOKEN),
+      (GenerateToken.USER_CONFIRM_ATTEMPTS, str(2)),
+      (GenerateToken.USER_CONFIRM_INTERVAL_S, str(0.0)),
+  )
   @patch.object(
       Http, 'response',
       Mock(side_effect=[VALID_BIND_BY_BANYA_RESULT, INVALID_USER_CONFIRM_BY_BANYA_RESULT]))
-  def test_invalidUserconfirmByBanyaResult_raises(self):
+  def test_invalidUserConfirmByBanyaResult_raises(self):
     with self.assertRaises(Exception):
       GenerateToken.execute(True)
 
@@ -69,13 +73,53 @@ class TestGenerateToken(absltest.TestCase):
         })
     ])
 
-  @flagsaver.as_parsed((Http.TOKEN, SEED_TOKEN))
+  NON_ZERO_USER_CONFIRM_BY_BANYA_RESULT_CODE = SimpleNamespace(text=json.dumps({
+      'ResultCode': '-6674',
+  }))
+
+  @flagsaver.as_parsed(
+      (Http.TOKEN, SEED_TOKEN),
+      (GenerateToken.USER_CONFIRM_ATTEMPTS, str(2)),
+      (GenerateToken.USER_CONFIRM_INTERVAL_S, str(0.0)),
+  )
   @patch.object(
       Http, 'response',
       Mock(side_effect=[
           VALID_BIND_BY_BANYA_RESULT,
+          NON_ZERO_USER_CONFIRM_BY_BANYA_RESULT_CODE,
+          NON_ZERO_USER_CONFIRM_BY_BANYA_RESULT_CODE,
+      ]))
+  def test_nonZeroUserConfirmByBanyaResultCode_retries(self):
+    with self.assertRaises(TimeoutError):
+      GenerateToken.execute(True)
+
+    Http.response.assert_has_calls([
+        call('BindByBanya.cgi', {
+            '-usr': self.SEED_TOKEN,
+            '-signkey': self.SEED_TOKEN_PAIR_KEY
+        }),
+        call('UserconfirmByBanya.cgi', {
+            '-timestamp': self.RESULT_TIMESTAMP,
+            '-signkey': self.RESULT_TIMESTAMP_PAIR_KEY
+        }),
+        call('UserconfirmByBanya.cgi', {
+            '-timestamp': self.RESULT_TIMESTAMP,
+            '-signkey': self.RESULT_TIMESTAMP_PAIR_KEY
+        }),
+    ])
+
+  @flagsaver.as_parsed(
+      (Http.TOKEN, SEED_TOKEN),
+      (GenerateToken.USER_CONFIRM_ATTEMPTS, str(2)),
+      (GenerateToken.USER_CONFIRM_INTERVAL_S, str(0.0)),
+  )
+  @patch.object(
+      Http, 'response',
+      Mock(side_effect=[
+          VALID_BIND_BY_BANYA_RESULT,
+          NON_ZERO_USER_CONFIRM_BY_BANYA_RESULT_CODE,
           SimpleNamespace(text=json.dumps({'ResultCode': '0'})),
-          SimpleNamespace(text=json.dumps({'ResultCode': '0'}))
+          SimpleNamespace(text=json.dumps({'ResultCode': '0'})),
       ]))
   @patch.object(time, 'time', Mock(return_value=TIMESTAMP))
   def test_goodResult_callsAndReturnsToken(self):
@@ -86,6 +130,10 @@ class TestGenerateToken(absltest.TestCase):
         call('BindByBanya.cgi', {
             '-usr': self.SEED_TOKEN,
             '-signkey': self.SEED_TOKEN_PAIR_KEY
+        }),
+        call('UserconfirmByBanya.cgi', {
+            '-timestamp': self.RESULT_TIMESTAMP,
+            '-signkey': self.RESULT_TIMESTAMP_PAIR_KEY
         }),
         call('UserconfirmByBanya.cgi', {
             '-timestamp': self.RESULT_TIMESTAMP,
